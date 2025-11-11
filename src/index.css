@@ -5,42 +5,64 @@
 @layer base {
   :root {
     --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-geist: 'Geist', system-ui, sans-serif;
-    --font-geist-mono: 'Geist Mono', monospace;
-    --font-mona: 'Mona Sans', system-ui, sans-serif;
-    --font-ibm-plex: 'IBM Plex Sans', system-ui, sans-serif;
-    --font-manrope: 'Manrope', system-ui, sans-serif;
   }
 
-  html {
-    font-family: var(--font-sans);
-    font-feature-settings: "rlig" 1, "calt" 1;
-  }
-
+  html { height: 100%; }
   body {
-    @apply antialiased;
+    @apply antialiased min-h-screen bg-[#0a0a0a] text-white;
+    background-image:
+      radial-gradient(1200px 600px at 10% -10%, rgba(0,234,255,0.1), transparent 60%),
+      radial-gradient(1000px 500px at 110% 10%, rgba(255,0,255,0.08), transparent 60%),
+      radial-gradient(800px 400px at 50% 120%, rgba(192,132,252,0.08), transparent 60%);
+    background-attachment: fixed;
   }
 }
 
-/* Custom utility classes for shadcn/ui patterns */
+/* Neon utilities */
 @layer utilities {
-  .animate-in {
-    animation-name: animateIn;
-    animation-duration: 350ms;
-    --tw-enter-opacity: initial;
-    --tw-enter-scale: initial;
-    --tw-enter-rotate: initial;
-    --tw-enter-translate-x: initial;
-    --tw-enter-translate-y: initial;
+  .neon-shadow-cyan { box-shadow: 0 0 20px #00eaff, 0 0 40px #00eaff66; }
+  .neon-shadow-pink { box-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff66; }
+  .neon-shadow-purple { box-shadow: 0 0 20px #c084fc, 0 0 40px #c084fc66; }
+  .glass { @apply bg-white/5 border border-white/10 backdrop-blur-xl; }
+  .holo-border { position: relative; }
+  .holo-border::after {
+    content: '';
+    position: absolute; inset: -1px; border-radius: inherit; pointer-events: none;
+    background: conic-gradient(from 180deg at 50% 50%, #00eaff33, #c084fc33, #ff00ff33, #00eaff33);
+    filter: blur(8px); opacity: .5; z-index: 0;
   }
+  .floating { animation: floating 6s ease-in-out infinite; }
+  .grain-overlay { position: absolute; inset: 0; pointer-events: none; mix-blend: overlay; opacity: .12; background-image: url('https://grainy-gradients.vercel.app/noise.svg'); }
+  .tilt { transition: transform 300ms cubic-bezier(0.22,1,0.36,1); transform-style: preserve-3d; }
+  .tilt:hover { transform: perspective(800px) rotateX(4deg) rotateY(-4deg) translateY(-6px); }
+}
 
-  .animate-out {
-    animation-name: animateOut;
-    animation-duration: 350ms;
-    --tw-exit-opacity: initial;
-    --tw-exit-scale: initial;
-    --tw-exit-rotate: initial;
-    --tw-exit-translate-x: initial;
-    --tw-exit-translate-y: initial;
-  }
+/* Glitch effect */
+.glitch {
+  position: relative; display: inline-block; text-shadow: 0 0 12px #00eaff88;
+}
+.glitch::before, .glitch::after {
+  content: attr(data-text);
+  position: absolute; left: 0; top: 0; width: 100%; overflow: hidden; clip-path: inset(0 0 0 0);
+}
+.glitch::before { color: #00eaff; transform: translate(2px,0); animation: glitch 2.5s infinite ease-in-out alternate; }
+.glitch::after { color: #ff00ff; transform: translate(-2px,0); animation: glitch 3s infinite ease-in-out alternate-reverse; }
+
+@keyframes glitch {
+  0% { clip-path: inset(10% 0 85% 0); }
+  10% { clip-path: inset(80% 0 5% 0); }
+  20% { clip-path: inset(50% 0 30% 0); }
+  30% { clip-path: inset(40% 0 55% 0); }
+  40% { clip-path: inset(75% 0 15% 0); }
+  50% { clip-path: inset(5% 0 85% 0); }
+  60% { clip-path: inset(25% 0 60% 0); }
+  70% { clip-path: inset(45% 0 40% 0); }
+  80% { clip-path: inset(15% 0 75% 0); }
+  90% { clip-path: inset(60% 0 25% 0); }
+  100% { clip-path: inset(5% 0 85% 0); }
+}
+
+@keyframes floating {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
